@@ -1,0 +1,22 @@
+services:
+  db:
+    build: .
+    container_name: order-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: order_management
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppassword
+      TZ: Asia/Tokyo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d order_management"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
